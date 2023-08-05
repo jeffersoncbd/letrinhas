@@ -18,7 +18,7 @@ const App: React.FC = () => {
   const sayText = useSayText()
 
   const [color, setColor] = useState('black')
-  const [alphabetIndex, setAlphabetIndex] = useState(0)
+  const [alphabetIndex, setAlphabetIndex] = useState(2)
   const [currentLevel, setCurrentLevel] = useState(0)
 
   const levelFunctions: LevelFunction[] = [
@@ -104,7 +104,7 @@ const App: React.FC = () => {
           </div>
           <div
             style={{
-              height: 50,
+              height: 60,
               width: 50,
               cursor: 'pointer',
               backgroundColor: listening ? '#ffffff00' : '#ffffffcc'
@@ -119,6 +119,11 @@ const App: React.FC = () => {
               }
             }}
           ></div>
+          <span style={{ color: 'white' }}>!</span>{' '}
+          <div style={{ marginTop: 4, color: 'gray' }}>
+            {transcript}
+            <span style={{ color: 'white' }}>!</span>
+          </div>
         </div>
 
         <span style={{ color: 'gray', alignSelf: 'flex-start' }}>
