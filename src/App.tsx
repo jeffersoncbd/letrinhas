@@ -45,7 +45,6 @@ const App: React.FC = () => {
   }
 
   useEffect(() => {
-    console.log(transcript)
     if (transcript.length !== 0 && !listening) {
       if (
         transcript
