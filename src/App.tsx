@@ -48,7 +48,9 @@ const App: React.FC = () => {
     console.log(transcript)
     if (transcript.length !== 0 && !listening) {
       if (
-        transcript.toLowerCase().includes(`letra ${alphabet[alphabetIndex][0]}`)
+        transcript
+          .toLowerCase()
+          .includes(`letra ${alphabet[alphabetIndex][0]} `)
       ) {
         updateAlphabetIndex()
       } else {
@@ -110,7 +112,9 @@ const App: React.FC = () => {
             }}
             onClick={() => {
               if (!listening) {
-                void SpeechRecognition.startListening({ language: 'pt-BR' })
+                void SpeechRecognition.startListening({
+                  language: 'pt-BR'
+                })
               } else {
                 resetTranscript()
               }
