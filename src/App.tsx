@@ -81,11 +81,16 @@ const App: React.FC = () => {
           display: 'flex',
           width: '100%',
           maxWidth: '400px',
-          margin: '0 auto'
+          margin: '0 auto',
+          flexDirection: 'column'
         }}
       >
+        <span style={{ color: 'gray', alignSelf: 'flex-end' }}>
+          level {currentLevel + 1}
+        </span>
+
         <div style={{ alignSelf: 'center' }}>
-          <span style={{ fontSize: 70 }}>{alphabet[alphabetIndex][1]}</span>
+          <span style={{ fontSize: 200 }}>{alphabet[alphabetIndex][1]}</span>
         </div>
 
         <div
@@ -125,10 +130,6 @@ const App: React.FC = () => {
             <span style={{ color: 'white' }}>!</span>
           </div>
         </div>
-
-        <span style={{ color: 'gray', alignSelf: 'flex-start' }}>
-          level {currentLevel + 1}
-        </span>
       </div>
     </div>
   )
