@@ -47,7 +47,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (transcript.length !== 0 && !listening) {
       if (
-        transcript
+        `${transcript} `
           .toLowerCase()
           .includes(`letra ${alphabet[alphabetIndex][0]} `)
       ) {
