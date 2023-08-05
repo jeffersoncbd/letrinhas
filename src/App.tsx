@@ -18,7 +18,7 @@ const App: React.FC = () => {
   const sayText = useSayText()
 
   const [color, setColor] = useState('black')
-  const [alphabetIndex, setAlphabetIndex] = useState(2)
+  const [alphabetIndex, setAlphabetIndex] = useState(0)
   const [currentLevel, setCurrentLevel] = useState(0)
 
   const levelFunctions: LevelFunction[] = [
