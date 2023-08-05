@@ -3,54 +3,10 @@ import 'regenerator-runtime/runtime'
 import SpeechRecognition, {
   useSpeechRecognition
 } from 'react-speech-recognition'
-import { useTts } from 'tts-react'
-
-const alphabet = [
-  'a',
-  'b',
-  'c',
-  'd',
-  'e',
-  'f',
-  'g',
-  'h',
-  'i',
-  'j',
-  'k',
-  'l',
-  'm',
-  'n',
-  'o',
-  'p',
-  'q',
-  'r',
-  's',
-  't',
-  'u',
-  'v',
-  'w',
-  'x',
-  'y',
-  'z'
-]
+import { alphabet } from './alphabet'
+import { useSayText } from './hooks/sayText'
 
 type LevelFunction = () => number
-
-function useTextToSpeech(): {
-  playText: React.Dispatch<React.SetStateAction<string>>
-} {
-  const [text, setText] = useState('')
-  const { play } = useTts({
-    children: text,
-    markTextAsSpoken: true
-  })
-
-  useEffect(() => {
-    play()
-  }, [text, play])
-
-  return { playText: setText }
-}
 
 const App: React.FC = () => {
   const {
@@ -58,8 +14,8 @@ const App: React.FC = () => {
     transcript,
     resetTranscript,
     browserSupportsSpeechRecognition
-  } = useSpeechRecognition()
-  const { playText } = useTextToSpeech()
+  } = useSpeechRecognition({})
+  const sayText = useSayText()
 
   const [color, setColor] = useState('black')
   const [alphabetIndex, setAlphabetIndex] = useState(0)
@@ -77,33 +33,30 @@ const App: React.FC = () => {
     }
   ]
 
-  useEffect(() => {
-    function updateAlphabetIndex(): void {
-      setTimeout(() => {
-        resetTranscript()
-        setColor('black')
-        const newIndex = levelFunctions[currentLevel]()
-        setAlphabetIndex(newIndex)
-        if (newIndex + 1 === alphabet.length) {
-          setCurrentLevel(currentLevel + 1)
-        }
-        setTimeout(() => {
-          void SpeechRecognition.startListening({ language: 'pt-BR' })
-        }, 100)
-      }, 1000)
+  function updateAlphabetIndex(): void {
+    resetTranscript()
+    setColor('black')
+    const newIndex = levelFunctions[currentLevel]()
+    setAlphabetIndex(newIndex)
+    if (newIndex + 1 === alphabet.length) {
+      setCurrentLevel(currentLevel + 1)
     }
+    void SpeechRecognition.startListening({ language: 'pt-BR' })
+  }
 
+  useEffect(() => {
     if (transcript.length !== 0 && !listening) {
-      let newColor = 'red'
       if (
-        transcript.toLowerCase().includes(`letra ${alphabet[alphabetIndex]}`)
+        transcript.toLowerCase().includes(`letra ${alphabet[alphabetIndex][0]}`)
       ) {
-        newColor = 'green'
+        updateAlphabetIndex()
       } else {
-        playText(`letra ${alphabet[alphabetIndex]}`)
+        setColor('red')
+        sayText({
+          text: `letra ${alphabet[alphabetIndex][0]} de ${alphabet[alphabetIndex][2]}`,
+          onEnd: updateAlphabetIndex
+        })
       }
-      setColor(newColor)
-      updateAlphabetIndex()
     }
   }, [transcript, listening])
 
@@ -115,40 +68,59 @@ const App: React.FC = () => {
     <div
       style={{
         height: '100vh',
-        width: '100%',
-        maxWidth: '400px',
-        margin: '0 auto',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'column',
         gap: 5
       }}
     >
-      <span style={{ color: 'gray', alignSelf: 'flex-end' }}>
-        level {currentLevel + 1}
-      </span>
-      <span style={{ color, fontSize: 100, cursor: 'default' }}>
-        {alphabet[alphabetIndex].toUpperCase()}
-      </span>
-      <div style={{ fontSize: 50, marginBottom: -60, cursor: 'default' }}>
-        🎙️
-      </div>
       <div
         style={{
-          height: 50,
-          width: 50,
-          cursor: 'pointer',
-          backgroundColor: listening ? '#ffffff00' : '#ffffffcc'
+          display: 'flex',
+          width: '100%',
+          maxWidth: '400px',
+          margin: '0 auto'
         }}
-        onClick={() => {
-          if (!listening) {
-            void SpeechRecognition.startListening({ language: 'pt-BR' })
-          } else {
-            resetTranscript()
-          }
-        }}
-      ></div>
+      >
+        <div style={{ alignSelf: 'center' }}>
+          <span style={{ fontSize: 70 }}>{alphabet[alphabetIndex][1]}</span>
+        </div>
+
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
+          <span style={{ color, fontSize: 100, cursor: 'default' }}>
+            {alphabet[alphabetIndex][0].toUpperCase()}
+          </span>
+          <div style={{ fontSize: 50, marginBottom: -60, cursor: 'default' }}>
+            🎙️
+          </div>
+          <div
+            style={{
+              height: 50,
+              width: 50,
+              cursor: 'pointer',
+              backgroundColor: listening ? '#ffffff00' : '#ffffffcc'
+            }}
+            onClick={() => {
+              if (!listening) {
+                void SpeechRecognition.startListening({ language: 'pt-BR' })
+              } else {
+                resetTranscript()
+              }
+            }}
+          ></div>
+        </div>
+
+        <span style={{ color: 'gray', alignSelf: 'flex-start' }}>
+          level {currentLevel + 1}
+        </span>
+      </div>
     </div>
   )
 }
