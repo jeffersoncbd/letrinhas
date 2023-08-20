@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import 'regenerator-runtime/runtime'
-import SpeechRecognition, {
-  useSpeechRecognition
-} from 'react-speech-recognition'
+
 import { alphabet } from './alphabet'
 import { useSayText } from './hooks/sayText'
+import { useListen } from './hooks/listen'
 
 type LevelFunction = () => number
 
 const App: React.FC = () => {
-  const {
-    listening,
-    transcript,
-    resetTranscript,
-    browserSupportsSpeechRecognition
-  } = useSpeechRecognition({})
-  const sayText = useSayText()
+  const { sayText } = useSayText()
+  const { listen, browserSupport, listening, transcript } = useListen()
 
   const [color, setColor] = useState('black')
   const [alphabetIndex, setAlphabetIndex] = useState(0)
@@ -34,14 +27,14 @@ const App: React.FC = () => {
   ]
 
   function updateAlphabetIndex(): void {
-    resetTranscript()
+    listen.stop()
     setColor('black')
     const newIndex = levelFunctions[currentLevel]()
     setAlphabetIndex(newIndex)
     if (newIndex + 1 === alphabet.length) {
       setCurrentLevel(currentLevel + 1)
     }
-    void SpeechRecognition.startListening({ language: 'pt-BR' })
+    listen.start()
   }
 
   useEffect(() => {
@@ -62,7 +55,7 @@ const App: React.FC = () => {
     }
   }, [transcript, listening])
 
-  if (!browserSupportsSpeechRecognition) {
+  if (!browserSupport) {
     return <span>Browser doesn&#39;t support speech recognition.</span>
   }
 
@@ -115,12 +108,11 @@ const App: React.FC = () => {
               backgroundColor: listening ? '#ffffff00' : '#ffffffcc'
             }}
             onClick={() => {
+              console.log(listening)
               if (!listening) {
-                void SpeechRecognition.startListening({
-                  language: 'pt-BR'
-                })
+                listen.start()
               } else {
-                resetTranscript()
+                listen.stop()
               }
             }}
           ></div>

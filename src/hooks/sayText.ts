@@ -5,8 +5,11 @@ interface SayTextProperties {
   text: string
   onEnd?: () => void
 }
+interface UseSayTextReturn {
+  sayText: Dispatch<SetStateAction<SayTextProperties>>
+}
 
-export function useSayText(): Dispatch<SetStateAction<SayTextProperties>> {
+export function useSayText(): UseSayTextReturn {
   const [props, setProps] = useState<SayTextProperties>({ text: '' })
   const { play } = useTts({
     children: props.text,
@@ -18,5 +21,5 @@ export function useSayText(): Dispatch<SetStateAction<SayTextProperties>> {
     play()
   }, [props.text, play])
 
-  return setProps
+  return { sayText: setProps }
 }
