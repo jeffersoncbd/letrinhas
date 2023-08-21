@@ -46,10 +46,14 @@ const App: React.FC = () => {
       ) {
         updateAlphabetIndex()
       } else {
+        listen.stop()
         setColor('red')
         sayText({
           text: `letra ${alphabet[alphabetIndex][0]} de ${alphabet[alphabetIndex][2]}`,
-          onEnd: updateAlphabetIndex
+          onEnd: () => {
+            setColor('black')
+            listen.start()
+          }
         })
       }
     }
@@ -108,7 +112,6 @@ const App: React.FC = () => {
               backgroundColor: listening ? '#ffffff00' : '#ffffffcc'
             }}
             onClick={() => {
-              console.log(listening)
               if (!listening) {
                 listen.start()
               } else {
