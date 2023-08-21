@@ -13,6 +13,7 @@ const App: React.FC = () => {
   const [color, setColor] = useState('black')
   const [alphabetIndex, setAlphabetIndex] = useState(0)
   const [currentLevel, setCurrentLevel] = useState(0)
+  const [hearts, setHearts] = useState(2)
 
   const levelFunctions: LevelFunction[] = [
     () => {
@@ -38,6 +39,18 @@ const App: React.FC = () => {
   }
 
   useEffect(() => {
+    if (hearts === 0) {
+      setAlphabetIndex(0)
+      setCurrentLevel(0)
+      setHearts(2)
+      listen.stop()
+      sayText({
+        text: 'Acabaram as chances, vamos recomeçar!'
+      })
+    }
+  }, [hearts])
+
+  useEffect(() => {
     if (transcript.length !== 0 && !listening) {
       if (
         `${transcript} `
@@ -51,6 +64,7 @@ const App: React.FC = () => {
         sayText({
           text: `letra ${alphabet[alphabetIndex][0]} de ${alphabet[alphabetIndex][2]}`,
           onEnd: () => {
+            setHearts(hearts - 1)
             setColor('black')
             listen.start()
           }
@@ -82,9 +96,10 @@ const App: React.FC = () => {
           flexDirection: 'column'
         }}
       >
-        <span style={{ color: 'gray', alignSelf: 'flex-end' }}>
-          level {currentLevel + 1}
-        </span>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <span>{Array.from({ length: hearts }, () => '❤️')}</span>
+          <span style={{ color: 'gray' }}>level {currentLevel + 1}</span>
+        </div>
 
         <div style={{ alignSelf: 'center' }}>
           <span style={{ fontSize: 200 }}>{alphabet[alphabetIndex][1]}</span>
