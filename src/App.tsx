@@ -122,9 +122,8 @@ const App: React.FC = () => {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>{Array.from({ length: hearts }, () => '❤️')}</span>
-          <span style={{ color: 'gray' }}>
-            {score} - level {currentLevel + 1}
-          </span>
+          <span style={{ color: 'gray', fontSize: 10 }}>{score}</span>
+          <span style={{ fontWeight: 'bold' }}>level {currentLevel + 1}</span>
         </div>
 
         <div
