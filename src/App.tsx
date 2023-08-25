@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const [color, setColor] = useState('black')
   const [alphabetIndex, setAlphabetIndex] = useState(0)
   const [currentLevel, setCurrentLevel] = useState(0)
-  const [hearts, setHearts] = useState(5)
+  const [hearts, setHearts] = useState(10)
   const [score, setScore] = useState(0)
 
   const levelFunctions: LevelFunction[] = [
@@ -121,9 +121,22 @@ const App: React.FC = () => {
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span>{Array.from({ length: hearts }, () => '❤️')}</span>
-          <span style={{ color: 'gray', fontSize: 10 }}>{score}</span>
-          <span style={{ fontWeight: 'bold' }}>level {currentLevel + 1}</span>
+          <span style={{ flex: 1 }}>
+            {Array.from({ length: hearts }, () => '❤️')}
+          </span>
+          <span
+            style={{
+              flex: 1,
+              textAlign: 'center',
+              color: 'gray',
+              fontSize: 10
+            }}
+          >
+            {score}
+          </span>
+          <span style={{ flex: 1, fontWeight: 'bold', textAlign: 'right' }}>
+            level {currentLevel + 1}
+          </span>
         </div>
 
         <div
