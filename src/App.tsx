@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const [color, setColor] = useState('black')
   const [alphabetIndex, setAlphabetIndex] = useState(0)
   const [currentLevel, setCurrentLevel] = useState(0)
-  const [hearts, setHearts] = useState(2)
+  const [hearts, setHearts] = useState(5)
 
   const levelFunctions: LevelFunction[] = [
     () => {
@@ -42,7 +42,7 @@ const App: React.FC = () => {
     if (hearts === 0) {
       setAlphabetIndex(0)
       setCurrentLevel(0)
-      setHearts(2)
+      setHearts(5)
       listen.stop()
       sayText({
         text: 'Acabaram as chances, vamos recomeçar!'
