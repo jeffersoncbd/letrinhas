@@ -14,6 +14,7 @@ const App: React.FC = () => {
   const [alphabetIndex, setAlphabetIndex] = useState(0)
   const [currentLevel, setCurrentLevel] = useState(0)
   const [hearts, setHearts] = useState(5)
+  const [score, setScore] = useState(0)
 
   const levelFunctions: LevelFunction[] = [
     () => {
@@ -27,13 +28,21 @@ const App: React.FC = () => {
     }
   ]
 
+  function levelUpdateConditions(): boolean {
+    return (
+      (score === 25 && currentLevel === 0) ||
+      (score === 15 && currentLevel === 1)
+    )
+  }
+
   function updateAlphabetIndex(): void {
     listen.stop()
     setColor('black')
     const newIndex = levelFunctions[currentLevel]()
     setAlphabetIndex(newIndex)
-    if (newIndex + 1 === alphabet.length) {
+    if (levelUpdateConditions()) {
       setCurrentLevel(currentLevel + 1)
+      setScore(0)
     }
     listen.start()
   }
@@ -57,6 +66,7 @@ const App: React.FC = () => {
           .toLowerCase()
           .includes(`letra ${alphabet[alphabetIndex][0]} `)
       ) {
+        setScore(score + 1)
         updateAlphabetIndex()
       } else {
         listen.stop()
