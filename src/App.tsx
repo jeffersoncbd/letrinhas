@@ -25,6 +25,15 @@ const App: React.FC = () => {
     () => {
       const index = Math.floor(Math.random() * alphabet.length)
       return index
+    },
+    () => {
+      const index = alphabetIndex + 1
+      setAlphabetIndex(index)
+      return index
+    },
+    () => {
+      const index = Math.floor(Math.random() * alphabet.length)
+      return index
     }
   ]
 
@@ -52,6 +61,7 @@ const App: React.FC = () => {
       setAlphabetIndex(0)
       setCurrentLevel(0)
       setHearts(5)
+      setScore(0)
       listen.stop()
       sayText({
         text: 'Acabaram as chances, vamos recomeçar!'
@@ -114,7 +124,9 @@ const App: React.FC = () => {
         </div>
 
         <div style={{ alignSelf: 'center' }}>
-          <span style={{ fontSize: 200 }}>{alphabet[alphabetIndex][1]}</span>
+          {currentLevel <= 2 && (
+            <span style={{ fontSize: 200 }}>{alphabet[alphabetIndex][1]}</span>
+          )}
         </div>
 
         <div
