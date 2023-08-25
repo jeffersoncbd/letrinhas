@@ -27,7 +27,7 @@ const App: React.FC = () => {
       return index
     },
     () => {
-      const index = alphabetIndex + 1
+      const index = score === 0 ? 0 : alphabetIndex + 1
       setAlphabetIndex(index)
       return index
     },
@@ -40,19 +40,23 @@ const App: React.FC = () => {
   function levelUpdateConditions(): boolean {
     return (
       (score === 25 && currentLevel === 0) ||
-      (score === 15 && currentLevel === 1)
+      (score === 20 && currentLevel === 1) ||
+      (score === 25 && currentLevel === 2) ||
+      (score === 15 && currentLevel === 3)
     )
   }
 
   function updateAlphabetIndex(): void {
     listen.stop()
     setColor('black')
-    const newIndex = levelFunctions[currentLevel]()
-    setAlphabetIndex(newIndex)
+    let level = currentLevel
     if (levelUpdateConditions()) {
-      setCurrentLevel(currentLevel + 1)
+      level += 1
+      setCurrentLevel(level)
       setScore(0)
     }
+    const newIndex = levelFunctions[level]()
+    setAlphabetIndex(newIndex)
     listen.start()
   }
 
@@ -123,8 +127,13 @@ const App: React.FC = () => {
           </span>
         </div>
 
-        <div style={{ alignSelf: 'center' }}>
-          {currentLevel <= 2 && (
+        <div
+          style={{
+            alignSelf: 'center',
+            height: currentLevel < 2 ? undefined : 100
+          }}
+        >
+          {currentLevel < 2 && (
             <span style={{ fontSize: 200 }}>{alphabet[alphabetIndex][1]}</span>
           )}
         </div>
