@@ -101,6 +101,21 @@ const App: React.FC = () => {
     return <span>Browser doesn&#39;t support speech recognition.</span>
   }
 
+  if (currentLevel === 4) {
+    return (
+      <div
+        style={{
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <h1 style={{ fontSize: '60px' }}>🎉 5 🎉</h1>
+      </div>
+    )
+  }
+
   return (
     <div
       style={{
