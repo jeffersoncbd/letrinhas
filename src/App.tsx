@@ -34,16 +34,16 @@ const App: React.FC = () => {
     () => {
       const index = Math.floor(Math.random() * alphabet.length)
       return index
+    },
+    () => {
+      const index = Math.floor(Math.random() * alphabet.length)
+      return index
     }
   ]
 
   function levelUpdateConditions(): boolean {
-    return (
-      (score === 25 && currentLevel === 0) ||
-      (score === 20 && currentLevel === 1) ||
-      (score === 25 && currentLevel === 2) ||
-      (score === 15 && currentLevel === 3)
-    )
+    const scoreLevels = [25, 20, 25, 15]
+    return score === scoreLevels[currentLevel]
   }
 
   function updateAlphabetIndex(): void {
@@ -143,7 +143,7 @@ const App: React.FC = () => {
             style={{
               flex: 1,
               textAlign: 'center',
-              color: 'gray',
+              color: '#eaeaea',
               fontSize: 10
             }}
           >
